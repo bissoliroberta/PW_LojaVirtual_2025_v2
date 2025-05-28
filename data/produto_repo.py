@@ -11,15 +11,14 @@ def criar_tabela() -> bool:
 
 
 def inserir(produto: Produto) -> Optional[int]:
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute(INSERIR, (
-        produto.nome, 
-        produto.descricao, 
-        produto.preco, 
-        produto.quantidade))
-    conn.commit()
-    conn.close()
+    with get_connection() as conn:     
+        cursor = conn.cursor()
+        cursor.execute(INSERIR, (
+            produto.nome, 
+            produto.descricao, 
+            produto.preco, 
+            produto.quantidade))
+        return cursor.lastrowid
 
 def obter_todos() -> list[Produto]:
     with get_connection() as conn:  
